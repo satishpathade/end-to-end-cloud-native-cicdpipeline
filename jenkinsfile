@@ -1,6 +1,7 @@
 pipeline {
 agent any
 
+```
 environment {
     IMAGE_NAME = "satishpathade/cloud-native-cicd"
     IMAGE_TAG = "${BUILD_NUMBER}"
@@ -9,10 +10,19 @@ environment {
 stages {
 
     stage('Pull Source Code') {
-    steps {
-        git branch: 'main', url: 'https://github.com/satishpathade/end-to-end-cloud-native-cicdpipeline.git'
+        steps {
+            git branch: 'main', url: 'https://github.com/satishpathade/end-to-end-cloud-native-cicdpipeline.git'
+        }
     }
-}
+
+    stage('Setup Node') {
+        steps {
+            sh '''
+            sudo apt update
+            sudo apt install -y nodejs npm
+            '''
+        }
+    }
 
     stage('Install Dependencies') {
         steps {
@@ -26,9 +36,9 @@ stages {
         steps {
             dir('app') {
                 sh '''
-                    node server.js &
-                    sleep 5
-                    pkill node || true
+                node server.js &
+                sleep 5
+                pkill node || true
                 '''
             }
         }
@@ -36,7 +46,7 @@ stages {
 
     stage('Build Docker Image') {
         steps {
-            sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./app'
+            sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./app"
         }
     }
 
@@ -49,8 +59,8 @@ stages {
             )]) {
 
                 sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                docker push ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
             }
         }
@@ -59,8 +69,8 @@ stages {
     stage('Deploy to Kubernetes') {
         steps {
             sh '''
-                kubectl set image deployment/cloud-native-cicd \
-                cloud-native-cicd=${IMAGE_NAME}:${IMAGE_TAG}
+            kubectl set image deployment/cloud-native-cicd \
+            cloud-native-cicd=${IMAGE_NAME}:${IMAGE_TAG}
             '''
         }
     }
@@ -72,5 +82,6 @@ post {
         sh 'docker logout || true'
     }
 }
+```
 
 }
