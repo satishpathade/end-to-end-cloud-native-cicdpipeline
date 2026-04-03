@@ -9,10 +9,10 @@ environment {
 stages {
 
     stage('Pull Source Code') {
-        steps {
-            git 'https://github.com/satishpathade/end-to-end-cloud-native-cicdpipeline.git'
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/satishpathade/end-to-end-cloud-native-cicdpipeline.git'
     }
+}
 
     stage('Install Dependencies') {
         steps {
