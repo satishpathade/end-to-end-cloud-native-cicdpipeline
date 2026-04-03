@@ -1,7 +1,5 @@
 pipeline {
 agent any
-
-```
 environment {
     IMAGE_NAME = "satishpathade/cloud-native-cicd"
     IMAGE_TAG = "${BUILD_NUMBER}"
@@ -82,6 +80,4 @@ post {
         sh 'docker logout || true'
     }
 }
-```
-
 }
