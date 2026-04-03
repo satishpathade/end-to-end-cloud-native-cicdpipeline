@@ -1,5 +1,7 @@
 pipeline {
 agent any
+
+```
 environment {
     IMAGE_NAME = "satishpathade/cloud-native-cicd"
     IMAGE_TAG = "${BUILD_NUMBER}"
@@ -16,8 +18,9 @@ stages {
     stage('Setup Node') {
         steps {
             sh '''
-            sudo apt update
-            sudo apt install -y nodejs npm
+            sudo dpkg --configure -a || true
+            sudo DEBIAN_FRONTEND=noninteractive apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm
             '''
         }
     }
@@ -80,4 +83,6 @@ post {
         sh 'docker logout || true'
     }
 }
+```
+
 }
