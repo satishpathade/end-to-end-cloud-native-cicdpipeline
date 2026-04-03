@@ -67,13 +67,10 @@ stages {
     }
 
     stage('Deploy to Kubernetes') {
-        steps {
-            sh '''
-            kubectl set image deployment/cloud-native-cicd \
-            cloud-native-cicd=${IMAGE_NAME}:${IMAGE_TAG}
-            '''
-        }
+    steps {
+        sh 'kubectl apply -f k8s/'
     }
+}
 
 }
 
