@@ -1,6 +1,10 @@
 pipeline {
 agent any
 
+tools {
+        sonarQube 'sonar-scanner'
+    }
+
 environment {
     IMAGE_NAME = "satishpathade/cloud-native-cicd"
     IMAGE_TAG = "${BUILD_NUMBER}"
