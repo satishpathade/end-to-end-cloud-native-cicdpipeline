@@ -44,6 +44,14 @@ stages {
         }
     }
 
+    stage('SonarQube Analysis') {
+    steps {
+            withSonarQubeEnv('SonarQube') {
+                sh 'sonar-scanner'
+            }
+        }
+    }
+
     stage('Build Docker Image') {
         steps {
             sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./app"
@@ -67,17 +75,15 @@ stages {
     }
 
     stage('Deploy to Kubernetes') {
-    steps {
-        sh 'kubectl apply -f k8s/'
+        steps {
+                sh 'kubectl apply -f k8s/'
+            }
+        }
     }
-}
 
-}
-
-post {
-    always {
-        sh 'docker logout || true'
-    }
-}
-
+    post {
+        always {
+            sh 'docker logout || true'
+         }
+    }   
 }
