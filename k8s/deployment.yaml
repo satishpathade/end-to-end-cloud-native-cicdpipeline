@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: task-manager
-        image: satishpathade/task-manager:latest
+        image: satishpathade/cloud-native-cicd:latest
 
         ports:
         - containerPort: 3000
